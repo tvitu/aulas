@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitor Silva Pereira - Aulas de Informática</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #c0c0c0;
+            color: #000;
+            padding: 0;
+        }
+
+        .window {
+            max-width: 1200px;
+            margin: 20px auto;
+            background: #c0c0c0;
+            border: 3px solid;
+            border-color: #fff #000 #000 #fff;
+            box-shadow: 2px 2px 0 #000;
+        }
+
+        .title-bar {
+            background: linear-gradient(to right, #000080, #1084d0);
+            padding: 3px 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .title-bar-text {
+            color: #fff;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+        }
+
+        .title-bar-icon {
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border: 2px solid #000;
+        }
+
+        .title-bar-controls {
+            display: flex;
+            gap: 3px;
+        }
+
+        .title-bar-controls button {
+            width: 18px;
+            height: 18px;
+            background: #c0c0c0;
+            border: 2px solid;
+            border-color: #fff #000 #000 #fff;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .menu-bar {
+            background: #c0c0c0;
+            border-bottom: 2px solid;
+            border-color: #fff #000 #000 #fff;
+            display: flex;
+            gap: 0;
+        }
+
+        .menu-item {
+            padding: 5px 15px;
+            background: #c0c0c0;
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-weight: bold;
+            position: relative;
+            text-decoration: none;
+            color: #000;
+            display: inline-block;
+        }
+
+        .menu-item.active {
+            border-color: #000 #fff #fff #000;
+            background: #fff;
+        }
+
+        .menu-item:hover:not(.active) {
+            border-color: #fff #000 #000 #fff;
+            background: #e0e0e0;
+        }
+
+        .content {
+            padding: 20px;
+            background: #fff;
+            min-height: 500px;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #000;
+        }
+
+        .highlight-box {
+            background: #c0c0c0;
+            border: 3px solid;
+            border-color: #000 #fff #fff #000;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .section-title {
+            background: #000080;
+            color: #fff;
+            padding: 5px 10px;
+            font-weight: bold;
+            margin: 25px 0 15px 0;
+            border: 2px solid;
+            border-color: #fff #000 #000 #fff;
+        }
+
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .plan-card {
+            background: #c0c0c0;
+            border: 3px solid;
+            border-color: #fff #000 #000 #fff;
+            padding: 15px;
+            box-shadow: 2px 2px 0 #000;
+        }
+
+        .plan-card h3 {
+            background: #000080;
+            color: #fff;
+            padding: 3px 8px;
+            margin: -15px -15px 10px -15px;
+            font-size: 14px;
+        }
+
+        .plan-price {
+            font-size: 28px;
+            font-weight: bold;
+            color: #000080;
+            margin: 10px 0;
+        }
+
+        .plan-detail {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .savings-badge {
+            background: #ff0;
+            border: 2px solid #000;
+            padding: 3px 8px;
+            display: inline-block;
+            margin-top: 8px;
+            font-weight: bold;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 49% { background: #ff0; }
+            50%, 100% { background: #f00; color: #fff; }
+        }
+
+        .premium-window {
+            background: #c0c0c0;
+            border: 3px solid;
+            border-color: #fff #000 #000 #fff;
+            box-shadow: 4px 4px 0 #000;
+            margin-bottom: 20px;
+        }
+
+        .premium-window.best-deal {
+            border-color: #ff0 #000 #000 #ff0;
+            box-shadow: 4px 4px 0 #000, 0 0 0 3px #ff0;
+            animation: bestDealPulse 2s infinite;
+        }
+
+        @keyframes bestDealPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .premium-title-bar {
+            background: linear-gradient(to right, #ff0, #ffa500);
+            padding: 4px 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #000;
+        }
+
+        .premium-icon {
+            font-size: 16px;
+            margin-right: 5px;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 3px;
+        }
+
+        .window-controls button {
+            width: 16px;
+            height: 16px;
+            background: #c0c0c0;
+            border: 2px solid;
+            border-color: #fff #000 #000 #fff;
+            font-size: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .premium-content {
+            padding: 20px;
+            background: #fff;
+            border: 2px solid;
+            border-color: #000 #fff #fff #000;
+            margin: 3px;
+        }
+
+        .premium-features-list {
+            margin-top: 15px;
+            background: #c0c0c0;
+            border: 2px solid;
+            border-color: #000 #fff #fff #000;
+            padding: 10px;
+        }
+
+        .feature-item {
+            padding: 5px;
+            margin: 3px 0;
+            background: #fff;
+            border: 1px solid #808080;
+            font-size: 13px;
+        }
+
+        .choose-btn {
+            display: block;
+            width: 100%;
+            background: #00ff00;
+            color: #000;
+            padding: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            border: 3px solid;
+            border-color: #fff #000 #000 #fff;
+            box-shadow: 2px 2px 0 #000;
+            font-size: 14px;
+            margin-top: 15px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .choose-btn:active {
+            border-color: #000 #fff #fff #000;
+            box-shadow: inset 2px 2px 0 #000;
+        }
+
+        .upgrade-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            background: #c0c0c0;
+            border: 3px solid;
+            border-color: #fff #000 #000 #fff;
+            box-shadow: 5px 5px 0 #000;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .upgrade-modal.show {
+            display: block;
+            animation: modalAppear 0.3s ease;
+        }
+
+        @keyframes modalAppear {
+            from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .modal-overlay.show {
+            display: block;
+        }
+
+        .modal-title-bar {
+            background: linear-gradient(to right, #000080, #1084d0);
+            padding: 3px 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title-text {
+            color: #fff;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .modal-close {
+            width: 18px;
+            height: 18px;
+            background: #c0c0c0;
+            border: 2px solid;
+            border-color: #fff #000 #000 #fff;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .modal-content {
+            padding: 20px;
+            background: #fff;
+            border: 2px solid;
+            border-color: #000 #fff #fff #000;
+            margin: 3px;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 15px;
+            color: #000080;
+        }
+
+        .modal-content p {
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .upgrade-benefits {
+            background: #c0c0c0;
+            border: 2px solid;
+            border-color: #000 #fff #fff #000;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .upgrade-benefits div {
+            padding: 5px;
+            margin: 5px 0;
+            background: #fff;
+            border: 1px solid #808080;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-btn-upgrade {
+            flex: 1;
+            background: #ff0;
+            color: #000;
+            padding: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            border: 3px solid;
+            border-color: #fff #000 #000 #fff;
+            box-shadow: 2px 2px 0 #000;
+            text-align: center;
+            cursor: pointer;
+            display: block;
+        }
+
+        .modal-btn-continue {
+            flex: 1;
+            background: #00ff00;
+            color: #000;
+            padding: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            border: 3px solid;
+            border-color: #fff #000 #000 #fff;
+            box-shadow: 2px 2px 0 #000;
+            text-align: center;
+            cursor: pointer;
+            display: block;
+        }
+
+        .services-list {
+            background: #c0c0c0;
+            border: 3px solid;
+            border-color: #000 #fff #fff #000;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .service-item {
+            padding: 8px;
+            margin: 5px 0;
+            background: #fff;
+            border: 2px solid;
+            border-color: #fff #000 #000 #fff;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .service-item:hover {
+            background: #e0e0e0;
+            border-color: #000 #fff #fff #000;
+        }
+
+        .service-item:before {
+            content: "▶ ";
+            color: #000080;
+            font-weight: bold;
+        }
+
+        .service-item.expanded:before {
+            content: "▼ ";
+        }
+
+        .service-detail {
+            display: none;
+            margin-top: 10px;
+            padding: 15px;
+            background: #c0c0c0;
+            border: 2px solid;
+            border-color: #000 #fff #fff #000;
+        }
+
+        .service-detail.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 500px; }
+        }
+
+        .service-detail h4 {
+            color: #000080;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .service-detail p {
+            margin-bottom: 10px;
+            line-height: 1.5;
+            font-size: 13px;
+        }
+
+        .service-detail .why-important {
+            background: #fff;
+            padding: 10px;
+            border: 1px solid #808080;
+            margin-top: 10px;
+        }
+
+        .service-contact-btn {
+            display: inline-block;
+            background: #00ff00;
+            color: #000;
+            padding: 8px 15px;
+            text-decoration: none;
+            font-weight: bold;
+            border: 2px solid;
+            border-color: #fff #000 #000 #fff;
+            box-shadow: 2px 2px 0 #000;
+            font-size: 12px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .contact-section {
+            background: #c0c0c0;
+            border: 3px solid;
+            border-color: #fff #000 #000 #fff;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .whatsapp-btn {
+            display: inline-block;
+            background: #00ff00;
+            color: #000;
+            padding: 12px 30px;
+            text-decoration: none;
+            font-weight: bold;
+            border: 3px solid;
+            border-color: #fff #000 #000 #fff;
+            box-shadow: 2px 2px 0 #000;
+            font-size: 18px;
+            margin: 15px 5px;
+            cursor: pointer;
+        }
+
+        .whatsapp-btn:active {
+            border-color: #000 #fff #fff #000;
+            box-shadow: inset 2px 2px 0 #000;
+        }
+
+        .intro-text {
+            line-height: 1.6;
+            margin: 15px 0;
+            text-align: justify;
+        }
+
+        .status-bar {
+            background: #c0c0c0;
+            border-top: 2px solid;
+            border-color: #fff #000 #000 #fff;
+            padding: 3px 10px;
+            display: flex;
+            gap: 20px;
+            font-size: 12px;
+        }
+
+        .status-item {
+            border: 2px solid;
+            border-color: #000 #fff #fff #000;
+            padding: 2px 8px;
+            background: #fff;
+        }
+
+        .pixel-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background: #000080;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        @media (max-width: 768px) {
+            .plans-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .menu-bar {
+                flex-wrap: wrap;
+            }
+            
+            .window {
+                margin: 5px;
+            }
+        }
+
+        .retro-table {
+            width: 100%;
+            border: 2px solid #000;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .retro-table td {
+            border: 1px solid #000;
+            padding: 8px;
+            background: #fff;
+        }
+
+        .retro-table td:first-child {
+            background: #c0c0c0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <div class="title-bar">
+            <div class="title-bar-text">
+                <span class="title-bar-icon"></span>
+                VITOR SILVA PEREIRA
+            </div>
+            <div class="title-bar-controls">
+                <button>_</button>
+                <button>□</button>
+                <button>X</button>
+            </div>
+        </div>
+
+        <div class="menu-bar">
+            <a href="https://wa.me/5516936181548?text=Ol%C3%A1!%20Gostaria%20de%20tirar%20uma%20d%C3%BAvida%20ou%20fazer%20um%20or%C3%A7amento%20de%20servi%C3%A7os%20de%20inform%C3%A1tica" class="menu-item active" target="_blank">Aulas</a>
+            <a href="https://wa.me/5516936181548?text=Ol%C3%A1!%20Preciso%20de%20ajuda%20com%20meu%20computador%20ou%20celular" class="menu-item" target="_blank">Ajudas</a>
+            <a href="https://wa.me/5516936181548?text=Ol%C3%A1!%20Gostaria%20de%20um%20or%C3%A7amento%20para%20a%20formata%C3%A7%C3%A3o%20do%20meu%20computador" class="menu-item" target="_blank">Formatação</a>
+            <a href="https://wa.me/5516936181548?text=Ol%C3%A1!%20Preciso%20de%20suporte%20t%C3%A9cnico%20para%20meu%20computador" class="menu-item" target="_blank">Computador</a>
+            <a href="https://wa.me/5516936181548?text=Ol%C3%A1!%20Preciso%20de%20ajuda%20com%20meu%20celular" class="menu-item" target="_blank">Celular</a>
+        </div>
+
+        <div class="content">
+            <h1>Assistência em TI e Informática</h1>
+            <p class="subtitle">Soluções rápidas para computador, celular e tecnologia do dia a dia.</p>
+            <p class="subtitle"><strong>Formatação • Suporte técnico • Ajuda com Office e aplicativos • Aulas de Informática</strong></p>
+
+            <div class="highlight-box">
+                <p class="intro-text">A tecnologia faz parte do nosso dia a dia — está no celular, no computador, na TV e até nos aparelhos domésticos. Mas nem sempre é fácil acompanhar tantas mudanças. Pensando nisso, preparei aulas e atendimentos personalizados para ajudar você a entender e aproveitar melhor seus dispositivos, de forma simples, tranquila e prática.</p>
+                
+                <p class="intro-text">Aqui, você pode aprender desde o básico do computador e do pacote Office até como usar aplicativos, organizar arquivos, enviar mensagens, participar de videochamadas ou configurar novos aparelhos.</p>
+                
+                <p class="intro-text">Cada aula é feita no seu ritmo com temas à sua escolha, com paciência, atenção e explicações claras. E se você tiver dúvidas sobre algo que usa no dia a dia — seja no celular, notebook, tablet ou impressora — pode perguntar à vontade!</p>
+                
+                <p class="intro-text"><strong>O objetivo é tornar a tecnologia uma aliada, e não uma dor de cabeça.</strong></p>
+            </div>
+
+            <div class="section-title">📚 PLANO SIMPLES</div>
+            <p style="margin-bottom: 15px;">Ideal para quem busca aprender de forma prática, com foco em dúvidas e uso cotidiano do computador.</p>
+
+            <div class="plans-grid">
+                <div class="plan-card">
+                    <h3>AULA RÁPIDA</h3>
+                    <div class="plan-detail">⏱ Até 30 minutos</div>
+                    <div class="plan-detail">Online via videochamada</div>
+                    <div class="plan-price">R$ 40</div>
+                    <button class="choose-btn" onclick="showUpgradeModal('Aula Rápida', 'R$ 40', 'https://wa.me/5516936181548?text=Ol%C3%A1!%20Gostaria%20de%20contratar%20a%20Aula%20R%C3%A1pida%20(30min%20-%20R%24%2040)')">ESCOLHER ESSE</button>
+                </div>
+
+                <div class="plan-card">
+                    <h3>AULA INDIVIDUAL</h3>
+                    <div class="plan-detail">⏱ 1 hora</div>
+                    <div class="plan-detail">Presencial</div>
+                    <div class="plan-price">R$ 60</div>
+                    <button class="choose-btn" onclick="showUpgradeModal('Aula Individual', 'R$ 60', 'https://wa.me/5516936181548?text=Ol%C3%A1!%20Gostaria%20de%20contratar%20a%20Aula%20Individual%20(1h%20-%20R%24%2060)')">ESCOLHER ESSE</button>
+                </div>
+
+                <div class="plan-card">
+                    <h3>PACOTE 5 AULAS</h3>
+                    <div class="plan-detail">⏱ 5 encontros de 1h</div>
+                    <div class="plan-price">R$ 250</div>
+                    <div class="plan-detail">R$ 50 por aula</div>
+                    <div class="savings-badge">💰 ECONOMIA DE R$ 50</div>
+                    <button class="choose-btn" onclick="showUpgradeModal('Pacote 5 Aulas', 'R$ 250', 'https://wa.me/5516936181548?text=Ol%C3%A1!%20Gostaria%20de%20contratar%20o%20Pacote%205%20Aulas%20(R%24%20250)')">ESCOLHER ESSE</button>
+                </div>
+            </div>
+
+            <div class="section-title">⭐ PLANO PREMIUM</div>
+            <p style="margin-bottom: 15px;"><strong>Aprenda com Conforto, Calma e Acompanhamento Individualizado</strong></p>
+
+            <div class="highlight-box">
+                <p style="margin-bottom: 10px;"><strong>Mais do que uma aula, é um momento de cuidado e aprendizado personalizado</strong>, com tempo estendido, material específico de acordo com as necessidades do aluno, ambiente acolhedor e um delicioso café com um lanchinho para acompanhar.</p>
+                
+                <p style="margin-top: 15px;"><strong>É o plano ideal para quem deseja:</strong></p>
+                <div style="margin-left: 20px; margin-top: 10px;">
+                    ▶ Ter mais tempo por aula para praticar e fixar o conteúdo<br>
+                    ▶ Aprender com conforto, sem correria<br>
+                    ▶ Ter um atendimento atencioso e personalizado<br>
+                    ▶ Viver uma experiência acolhedora e leve com tecnologia
+                </div>
+            </div>
+
+            <div class="plans-grid">
+                <div class="premium-window">
+                    <div class="premium-title-bar">
+                        <span class="premium-icon">⭐</span>
+                        <span>AULA AVULSA - PREMIUM</span>
+                        <div class="window-controls">
+                            <button>_</button>
+                            <button>□</button>
+                        </div>
+                    </div>
+                    <div class="premium-content">
+                        <div class="plan-detail">⏱ Duração: 1h30</div>
+                        <div class="plan-price">R$ 100</div>
+                        <div class="premium-features-list">
+                            <div class="feature-item">✓ Tempo estendido</div>
+                            <div class="feature-item">✓ Material personalizado</div>
+                            <div class="feature-item">✓ Café incluso</div>
+                        </div>
+                        <a href="https://wa.me/5516936181548?text=Ol%C3%A1!%20Gostaria%20de%20contratar%20a%20Aula%20Avulsa%20Premium%20(1h30%20-%20R%24%20100)" class="choose-btn" target="_blank">ESCOLHER ESSE</a>
+                    </div>
+                </div>
+
+                <div class="premium-window">
+                    <div class="premium-title-bar">
+                        <span class="premium-icon">⭐</span>
+                        <span>PLANO 3 AULAS - PREMIUM</span>
+                        <div class="window-controls">
+                            <button>_</button>
+                            <button>□</button>
+                        </div>
+                    </div>
+                    <div class="premium-content">
+                        <div class="plan-detail">⏱ 3 encontros de 1h30</div>
+                        <div class="plan-price">R$ 270</div>
+                        <div class="plan-detail">R$ 90 por aula</div>
+                        <div class="premium-features-list">
+                            <div class="feature-item">✓ Economia de R$ 30</div>
+                            <div class="feature-item">✓ Ambiente acolhedor</div>
+                            <div class="feature-item">✓ Atenção especial</div>
+                        </div>
+                        <a href="https://wa.me/5516936181548?text=Ol%C3%A1!%20Gostaria%20de%20contratar%20o%20Plano%203%20Aulas%20Premium%20(R%24%20270)" class="choose-btn" target="_blank">ESCOLHER ESSE</a>
+                    </div>
+                </div>
+
+                <div class="premium-window">
+                    <div class="premium-title-bar">
+                        <span class="premium-icon">⭐</span>
+                        <span>PLANO 5 AULAS - PREMIUM</span>
+                        <div class="window-controls">
+                            <button>_</button>
+                            <button>□</button>
+                        </div>
+                    </div>
+                    <div class="premium-content">
+                        <div class="plan-detail">⏱ 5 encontros de 1h30</div>
+                        <div class="plan-price">R$ 425</div>
+                        <div class="plan-detail">R$ 85 por aula</div>
+                        <div class="premium-features-list">
+                            <div class="feature-item">✓ Economia de R$ 75</div>
+                            <div class="feature-item">✓ Acompanhamento contínuo</div>
+                            <div class="feature-item">✓ Café e lanche</div>
+                        </div>
+                        <a href="https://wa.me/5516936181548?text=Ol%C3%A1!%20Gostaria%20de%20contratar%20o%20Plano%205%20Aulas%20Premium%20(R%24%20425)" class="choose-btn" target="_blank">ESCOLHER ESSE</a>
+                    </div>
+                </div>
+
+                <div class="premium-window best-deal">
+                    <div class="premium-title-bar">
+                        <span class="premium-icon">⭐</span>
+                        <span>PLANO 10 AULAS - PREMIUM</span>
+                        <div class="window-controls">
+                            <button>_</button>
+                            <button>□</button>
+                        </div>
+                    </div>
+                    <div class="premium-content">
+                        <div class="plan-detail">⏱ 10 encontros de 1h30</div>
+                        <div class="plan-price">R$ 800</div>
+                        <div class="plan-detail">R$ 80 por aula</div>
+                        <div class="savings-badge">💰 MELHOR CUSTO-BENEFÍCIO!</div>
+                        <div class="premium-features-list">
+                            <div class="feature-item">✓ Economia de R$ 200</div>
+                            <div class="feature-item">✓ Menor preço por aula</div>
+                            <div class="feature-item">✓ Resultado garantido</div>
+                        </div>
+                        <a href="https://wa.me/5516936181548?text=Ol%C3%A1!%20Gostaria%20de%20contratar%20o%20Plano%2010%20Aulas%20Premium%20(R%24%20800)" class="choose-btn" target="_blank">ESCOLHER ESSE</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title">🔧 SERVIÇOS TÉCNICOS EXTRAS</div>
+            <p style="margin-bottom: 15px;">Além das aulas, também ofereço serviços de suporte e configuração para facilitar o uso do seu computador e celular:</p>
+
+            <div class="services-list">
+                <div class="service-item">Instalação e atualização de programas</div>
+                <div class="service-item">Instalação do pacote Office</div>
+                <div class="service-item">Configuração de e-mails e impressoras</div>
+                <div class="service-item">Organização de arquivos e backup</div>
+                <div class="service-item">Suporte remoto e presencial</div>
+                <div class="service-item">Ajustes e otimização de sistema</div>
+                <div class="service-item">Upgrade de hardware</div>
+            </div>
+
+            <p style="font-style: italic; text-align: center; margin-top: 10px;">Valores sob consulta, conforme o tipo de serviço.</p>
+
+            <div class="contact-section">
+                <h2 style="margin-bottom: 15px;">Pronto para começar?</h2>
+                <p style="margin-bottom: 20px; font-size: 16px;">Entre em contato pelo WhatsApp e tire suas dúvidas!</p>
+                <a href="https://wa.me/5516936181548?text=Ol%C3%A1!%20Gostaria%20de%20tirar%20uma%20d%C3%BAvida%20ou%20fazer%20um%20or%C3%A7amento%20de%20servi%C3%A7os%20de%20inform%C3%A1tica" class="whatsapp-btn" target="_blank">
+                    📱 FALAR NO WHATSAPP
+                </a>
+                <br>
+                <p style="margin-top: 20px;">
+                    <strong>📞 (16) 93618-1548</strong><br>
+                    <strong>📧 vitorsilvainformaticas@gmail.com</strong>
+                </p>
+            </div>
+        </div>
+
+        <div class="status-bar">
+            <div class="status-item">Aulas e atendimentos presenciais e online</div>
+            <div class="status-item">Ambiente tranquilo e acolhedor</div>
+        </div>
+    </div>
+
+    <!-- Modal de Upgrade -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+    <div class="upgrade-modal" id="upgradeModal">
+        <div class="modal-title-bar">
+            <span class="modal-title-text">⚠️ CONSIDERE O PLANO PREMIUM!</span>
+            <button class="modal-close" onclick="closeModal()">X</button>
+        </div>
+        <div class="modal-content">
+            <h3>Que tal uma experiência ainda melhor?</h3>
+            <p>Você está prestes a escolher o plano <strong id="selectedPlan"></strong> por <strong id="selectedPrice"></strong>.</p>
+            <p>Mas temos uma sugestão especial para você:</p>
+            
+            <div class="upgrade-benefits">
+                <div><strong>⭐ VANTAGENS DO PLANO PREMIUM:</strong></div>
+                <div>✓ 50% mais tempo de aula (1h30 ao invés de 1h)</div>
+                <div>✓ Ambiente acolhedor com café e lanche inclusos</div>
+                <div>✓ Material didático personalizado</div>
+                <div>✓ Atenção individualizada sem pressa</div>
+                <div>✓ Experiência completa de aprendizado</div>
+            </div>
+
+            <p style="text-align: center; font-weight: bold; color: #000080;">Por apenas um pouco mais, você tem uma experiência muito superior!</p>
+
+            <div class="modal-buttons">
+                <a href="#premium-section" class="modal-btn-upgrade" onclick="closeModal()">
+                    ⭐ VER PLANOS PREMIUM
+                </a>
+                <a href="#" id="continueBtn" class="modal-btn-continue" target="_blank">
+                    CONTINUAR COM ESSE
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showUpgradeModal(planName, planPrice, whatsappLink) {
+            document.getElementById('selectedPlan').textContent = planName;
+            document.getElementById('selectedPrice').textContent = planPrice;
+            document.getElementById('continueBtn').href = whatsappLink;
+            document.getElementById('modalOverlay').classList.add('show');
+            document.getElementById('upgradeModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('show');
+            document.getElementById('upgradeModal').classList.remove('show');
+        }
+
+        const serviceInfoData = {
+            install: {
+                title: '💾 Instalação e atualização de programas',
+                description: 'Instalação completa de softwares essenciais e atualizações do sistema. Garanto que todos os programas funcionem corretamente e estejam na versão mais recente.',
+                why: '<strong>Por que é importante?</strong><br>Programas desatualizados podem ter falhas de segurança, bugs e incompatibilidades. Manter tudo atualizado garante melhor desempenho, segurança contra vírus e acesso às últimas funcionalidades.',
+                whatsapp: 'Ol%C3%A1!%20Gostaria%20de%20um%20or%C3%A7amento%20para%20instala%C3%A7%C3%A3o%20e%20atualiza%C3%A7%C3%A3o%20de%20programas'
+            },
+            office: {
+                title: '📊 Instalação do pacote Office',
+                description: 'Instalação e configuração completa do Microsoft Office (Word, Excel, PowerPoint, Outlook) ou alternativas gratuitas como LibreOffice.',
+                why: '<strong>Por que é importante?</strong><br>O pacote Office é essencial para trabalho, estudos e uso pessoal. Uma instalação correta garante que você tenha acesso a todas as ferramentas de produtividade necessárias, sem erros de ativação ou problemas de compatibilidade.',
+                whatsapp: 'Ol%C3%A1!%20Gostaria%20de%20um%20or%C3%A7amento%20para%20instala%C3%A7%C3%A3o%20do%20pacote%20Office'
+            },
+            email: {
+                title: '📧 Configuração de e-mails e impressoras',
+                description: 'Configuração de contas de e-mail em programas como Outlook, Thunderbird ou aplicativos de celular. Instalação e configuração de impressoras com todos os drivers necessários.',
+                why: '<strong>Por que é importante?</strong><br>E-mails mal configurados podem não receber mensagens importantes ou enviar para a pasta de spam. Impressoras sem os drivers corretos não funcionam adequadamente. Uma configuração profissional evita dores de cabeça e perda de tempo.',
+                whatsapp: 'Ol%C3%A1!%20Gostaria%20de%20um%20or%C3%A7amento%20para%20configura%C3%A7%C3%A3o%20de%20e-mails%20e%20impressoras'
+            },
+            backup: {
+                title: '📁 Organização de arquivos e backup',
+                description: 'Organização completa dos seus arquivos em pastas lógicas e criação de backups de segurança. Posso configurar backups automáticos na nuvem ou em dispositivos externos.',
+                why: '<strong>Por que é importante?</strong><br>Perder fotos, documentos e arquivos importantes é devastador. Um HD pode falhar a qualquer momento. Ter um backup organizado e atualizado é a única forma de garantir que suas memórias e trabalhos estejam seguros.',
+                whatsapp: 'Ol%C3%A1!%20Gostaria%20de%20um%20or%C3%A7amento%20para%20organiza%C3%A7%C3%A3o%20de%20arquivos%20e%20backup'
+            },
+            support: {
+                title: '🖥️ Suporte remoto e presencial',
+                description: 'Atendimento para resolver problemas urgentes, tirar dúvidas e auxiliar com dificuldades no computador ou celular. Posso atender remotamente via acesso remoto ou presencialmente.',
+                why: '<strong>Por que é importante?</strong><br>Problemas técnicos podem travar seu trabalho ou estudos. Ter um suporte confiável disponível economiza tempo, reduz estresse e garante que você não fique parado esperando soluções.',
+                whatsapp: 'Ol%C3%A1!%20Gostaria%20de%20um%20or%C3%A7amento%20para%20suporte%20t%C3%A9cnico'
+            },
+            optimize: {
+                title: '⚙️ Ajustes e otimização de sistema',
+                description: 'Limpeza profunda do sistema, remoção de programas desnecessários, otimização de inicialização e configurações para melhor desempenho.',
+                why: '<strong>Por que é importante?</strong><br>Com o tempo, o computador acumula arquivos temporários, programas que iniciam automaticamente e configurações que deixam tudo lento. Uma otimização profissional pode fazer seu computador voltar a ser rápido como novo.',
+                whatsapp: 'Ol%C3%A1!%20Gostaria%20de%20um%20or%C3%A7amento%20para%20otimiza%C3%A7%C3%A3o%20de%20sistema'
+            },
+            hardware: {
+                title: '🔧 Upgrade de hardware',
+                description: 'Análise e recomendação de melhorias no hardware: aumento de memória RAM, troca de HD por SSD, limpeza interna, troca de pasta térmica e outros upgrades.',
+                why: '<strong>Por que é importante?</strong><br>Muitas vezes não é necessário comprar um computador novo. Um upgrade bem feito (como adicionar um SSD) pode deixar seu computador até 10x mais rápido por um custo muito menor. É a forma mais econômica de prolongar a vida útil do equipamento.',
+                whatsapp: 'Ol%C3%A1!%20Gostaria%20de%20um%20or%C3%A7amento%20para%20upgrade%20de%20hardware'
+            }
+        };
+
+        function showServiceInfo(serviceKey, element) {
+            // Remove qualquer detalhe aberto anteriormente
+            const allDetails = document.querySelectorAll('.service-detail');
+            const allItems = document.querySelectorAll('.service-item');
+            
+            allDetails.forEach(detail => {
+                if (detail.parentElement !== element.parentElement) {
+                    detail.remove();
+                }
+            });
+            
+            allItems.forEach(item => {
+                if (item !== element) {
+                    item.classList.remove('expanded');
+                }
+            });
+
+            // Verifica se já existe um detalhe neste item
+            const existingDetail = element.nextElementSibling;
+            if (existingDetail && existingDetail.classList.contains('service-detail')) {
+                existingDetail.remove();
+                element.classList.remove('expanded');
+                return;
+            }
+
+            // Cria o novo detalhe
+            element.classList.add('expanded');
+            const info = serviceInfoData[serviceKey];
+            const detailDiv = document.createElement('div');
+            detailDiv.className = 'service-detail show';
+            detailDiv.innerHTML = `
+                <h4>${info.title}</h4>
+                <p>${info.description}</p>
+                <div class="why-important">
+                    ${info.why}
+                </div>
+                <a href="https://wa.me/5516936181548?text=${info.whatsapp}" class="service-contact-btn" target="_blank">
+                    📱 SOLICITAR ORÇAMENTO
+                </a>
+            `;
+            element.parentNode.insertBefore(detailDiv, element.nextSibling);
+        }
+    </script>
+</body>
+</html>
